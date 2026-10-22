@@ -1,13 +1,15 @@
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import SuperAdminLayout from '../layouts/SuperAdminLayout'
-import Dashboard from '../modules/dashboard/Dashboard'
-import Tenants from '../modules/tenants/Tenants'
-import TenantDetail from '../modules/tenants/TenantDetail'
 import Billing from '../modules/billing/Billing'
 import Analytics from '../modules/analytics/Analytics'
-import SystemHealth from '../modules/health/SystemHealth'
-import FeatureFlags from '../modules/flags/FeatureFlags'
-import AuditLog from '../modules/audit/AuditLog'
+
+// Placeholders for screens owned by teammates
+const Placeholder = ({ title, owner }) => (
+  <div>
+    <h1 style={{ margin: 0 }}>{title}</h1>
+    <p style={{ color: '#5B6776' }}>Owned by {owner}. Not built yet.</p>
+  </div>
+)
 
 const NotFound = () => (
   <div style={{ padding: 40 }}>
@@ -19,16 +21,15 @@ const NotFound = () => (
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="/" element={<Navigate to="/admin/billing" replace />} />
       <Route path="/admin" element={<SuperAdminLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="tenants" element={<Tenants />} />
-        <Route path="tenants/:id" element={<TenantDetail />} />
+        {/* Hidden placeholders: only here so the links from your screens work */}
+        <Route index element={<Placeholder title="Overview" owner="Student 1" />} />
+        <Route path="tenants/:id" element={<Placeholder title="Tenant Detail" owner="Student 1" />} />
+
+        {/* ---- YOUR SCREENS ---- */}
         <Route path="billing" element={<Billing />} />
         <Route path="analytics" element={<Analytics />} />
-        <Route path="health" element={<SystemHealth />} />
-        <Route path="flags" element={<FeatureFlags />} />
-        <Route path="audit" element={<AuditLog />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

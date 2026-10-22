@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import { colors } from '../../theme'
-import { useTenantStore } from '../../store/tenantStore'
+import { tenantsData } from '../../data/tenants'
 
 const plans = [
   { name: 'Starter', price: 19, features: ['Up to 3 users', 'Voice quotes', 'Invoicing'] },
@@ -35,14 +35,13 @@ const td = { padding: '14px 16px', color: colors.text }
 const linkStyle = { color: colors.navy700, textDecoration: 'none', fontWeight: 600 }
 
 export default function Billing() {
-  const tenants = useTenantStore((s) => s.tenants)
-  const updateTenant = useTenantStore((s) => s.updateTenant)
+  const [tenants, setTenants] = useState(tenantsData)
   const [invoiceFilter, setInvoiceFilter] = useState('All')
   const [message, setMessage] = useState('')
 
   const changePlan = (id, newPlan) => {
     const tenant = tenants.find((t) => t.id === id)
-    updateTenant(id, { plan: newPlan })
+    setTenants((list) => list.map((t) => (t.id === id ? { ...t, plan: newPlan } : t)))
     setMessage(`${tenant.name} moved to ${newPlan} (£${priceOf(newPlan)}/month)`)
   }
 
